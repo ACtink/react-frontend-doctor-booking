@@ -1,5 +1,5 @@
 import { FormControl, FormHelperText, Paper } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React ,{ useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Typography } from "@material-ui/core";
 import { MenuItem, InputLabel, Select } from "@material-ui/core";
@@ -73,11 +73,12 @@ function DoctorList(props) {
 // function to fetch the list of all the doctors
 
   async function getDoctorsList() {
+    try{
     const response = await getData(
       getAllDoctorsEndPoint + "?speciality=" + speciality
     );
 
-    try{
+   
     
     if (response.status === 200) {
       const doctorList = await response.json();
