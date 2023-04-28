@@ -75,7 +75,7 @@ function DoctorList(props) {
   async function getDoctorsList() {
     try{
     const response = await getData(
-      getAllDoctorsEndPoint + "?speciality=" + speciality
+      `https://doctor-booking-backend-production.up.railway.app/${getAllDoctorsEndPoint}?speciality=${speciality}`
     );
 
    

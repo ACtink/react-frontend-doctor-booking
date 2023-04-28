@@ -2,17 +2,17 @@
 
 
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Controller from "./screens/Controller";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <Controller/>
-  </React.StrictMode>
-);
+// const root = ReactDOM.createRoot(document.getElementById('root'));
+// root.render(
+//   <React.StrictMode>
+//     <Controller/>
+//   </React.StrictMode>
+// );
 
 
 
@@ -21,7 +21,7 @@ root.render(
 // root.render(<Controller />);
 
 
-// ReactDOM.render(<Controller />, document.getElementById("root"));
+ReactDOM.render(<Controller />, document.getElementById("root"));
 // createRoot.render(<Controller />, document.getElementById("root"));
 
 // If you want to start measuring performance in your app, pass a function
