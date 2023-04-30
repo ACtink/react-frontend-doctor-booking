@@ -1,12 +1,14 @@
 import { FormControl, FormHelperText, Paper } from "@material-ui/core";
 import React ,{ useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles ,alpha } from "@material-ui/core/styles";
 import { Button, Typography } from "@material-ui/core";
 import { MenuItem, InputLabel, Select } from "@material-ui/core";
 import { getData } from "../../util/fetch";
 import { Rating } from "@material-ui/lab";
 import BookAppointment from "./BookAppointment";
 import DoctorDetails from "./DoctorDetails";
+import * as dotenv from 'dotenv' 
+dotenv.config()
 
 const useStyles = makeStyles({
   paper: {
@@ -68,14 +70,16 @@ function DoctorList(props) {
     setSpeciality(e.target.value);
   };
 
-
+// const api_url = process.env.BACKEND_URL
+// console.log(api_url)
+const backend_url = process.env.REACT_APP_BACKEND_URL
 
 // function to fetch the list of all the doctors
 
   async function getDoctorsList() {
     try{
     const response = await getData(
-      `https://doctor-booking-backend-production.up.railway.app/${getAllDoctorsEndPoint}?speciality=${speciality}`
+      `${backend_url}/${getAllDoctorsEndPoint}?speciality=${speciality}`
     );
 
    

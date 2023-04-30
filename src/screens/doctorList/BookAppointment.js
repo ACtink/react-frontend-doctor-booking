@@ -9,10 +9,19 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { FormControl, FormHelperText, InputLabel } from "@material-ui/core";
+import {
+  FormControl,
+  FormHelperText,
+  InputLabel,
+
+} from "@material-ui/core";
 import { MenuItem, Select } from "@material-ui/core";
 import { getData, postData } from "../../util/fetch";
 import { Button } from "@material-ui/core";
+import enLocale from "date-fns/locale/en-GB";
+// import { DatePicker } from "@material-ui/pickers";
+// import { LocalizationProvider } from "@mui/x-date-pickers";
+import { alpha } from '@material-ui/core/styles';
 
 Modal.setAppElement("#root");
 
@@ -40,6 +49,8 @@ function BookAppointment(props) {
     setSelectedTime(e.target.value);
   };
 
+  const date = selectedDate.toISOString().split("T")[0];
+  const backendurl = process.env.REACT_APP_BACKEND_URL;
   const fetchAvailableSlots = async () => {
     if (
       selectedDoctor === null ||
@@ -48,16 +59,20 @@ function BookAppointment(props) {
     ) {
       return;
     }
-    const date = selectedDate.toISOString().split("T")[0];
+
+    console.log(
+      backendurl + "/doctors/" + selectedDoctor.id + "/timeSlots?date=" + date
+    );
 
     // fetching timeslots for a particular date selected by the user
     let response = await getData(
-      "doctors/" + selectedDoctor.id + "/timeSlots?date=" + date
+      backendurl + "/doctors/" + selectedDoctor.id + "/timeSlots?date=" + date
     );
 
     if (response.status === 200) {
-      response = await response.json();
-      setAvailableSlots(response.timeSlot);
+      const data = await response.json();
+      setAvailableSlots(data);
+      console.log(data);
       setSelectedTime("");
     } else {
       const error = response.json();
@@ -69,12 +84,11 @@ function BookAppointment(props) {
     fetchAvailableSlots();
   }, [selectedDate, selectedDoctor.id]);
 
-  useEffect(() => {
-    if (selectedTime === "") {
-      setIsTimeSlotSelected(false);
-    } else setIsTimeSlotSelected(true);
-  }, [selectedTime]);
-
+  // useEffect(() => {
+  //   if (selectedTime === "") {
+  //     setIsTimeSlotSelected(false);
+  //   } else setIsTimeSlotSelected(true);
+  // }, [selectedTime]);
 
   // calling the bookAppointment api to book the appointment
 
@@ -88,11 +102,12 @@ function BookAppointment(props) {
       userId: sessionStorage.getItem("uuid"),
       userEmailId: sessionStorage.getItem("uuid"),
       timeSlot: selectedTime,
-      appointmentDate: selectedDate.toISOString().split("T")[0],
+      appointmentDate: selectedDate.toLocaleDateString("en-GB"),
+      // appointmentDate: selectedDate.toISOString().split("T")[0],
       symptoms: symptoms,
       priorMedicalHistory: priorMedicalHistory,
     };
-    let response = await postData("appointments", data);
+    let response = await postData(backendurl + "/appointments", data);
 
     if (response.status === 200) {
       alert("Appointment Booked Successfully");
@@ -135,11 +150,12 @@ function BookAppointment(props) {
                 defaultValue={`${selectedDoctor.firstName} ${selectedDoctor.lastName} `}
               />
               <br></br>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <MuiPickersUtilsProvider className={alpha} utils={DateFnsUtils} >
                 <KeyboardDatePicker
+                className="alpha"
                   variant="inline"
                   disablePast
-                  format="dd/MM/yyyy"
+                  format="yyyy-MM-dd"
                   margin="normal"
                   id="date-picker"
                   label="Date Picker"
@@ -149,10 +165,13 @@ function BookAppointment(props) {
                     "aria-label": "change date",
                   }}
                 />
-              </MuiPickersUtilsProvider>
-              <br></br>
 
-              <FormControl>
+                
+              </MuiPickersUtilsProvider>
+
+              
+
+              {/* <FormControl>
                 <InputLabel id="demo-simple-select-helper-label" shrink>
                   Time Slot
                 </InputLabel>
@@ -167,7 +186,7 @@ function BookAppointment(props) {
                     <em>None</em>
                   </MenuItem>
 
-                  {availableSlots.map((slots) => {
+                  {availableSlots && availableSlots.map((slots) => {
                     return (
                       <MenuItem value={slots} key={slots}>
                         {" "}
@@ -181,7 +200,7 @@ function BookAppointment(props) {
                     <span>Select a time slot </span>
                   </FormHelperText>
                 )}
-              </FormControl>
+              </FormControl> */}
 
               <br></br>
               <FormControl>
@@ -191,7 +210,7 @@ function BookAppointment(props) {
                   placeholder="past illness"
                   multiline
                   variant="standard"
-                  rows={4}
+                  minRows={4}
                   onChange={(e) => {
                     setPriorMedicalHistory(e.target.value);
                   }}
@@ -205,7 +224,7 @@ function BookAppointment(props) {
                   placeholder="ex Cold , Swelling etc"
                   multiline
                   variant="standard"
-                  rows={4}
+                  minRows={4}
                   onChange={(e) => {
                     setSymptoms(e.target.value);
                   }}

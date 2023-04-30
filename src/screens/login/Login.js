@@ -22,12 +22,13 @@ function Login(props) {
   const classes = useStyles();
 
   const loginApiEndPoint = "/auth/login";
+  const backendurl = process.env.REACT_APP_BACKEND_URL;
 
   //  function to call loginApi
 
   const onSubmit = async (data) => {
     const response = await postData(
-      loginApiEndPoint,
+      `${backendurl}/${loginApiEndPoint}`,
       {},
       {
         Authorization:

@@ -20,13 +20,16 @@ const useStyles = makeStyles({
 function Register(props) {
   const { setModalIsOpen } = props;
 
+  const backendurl = process.env.REACT_APP_BACKEND_URL
+  console.log(backendurl)
+
   const classes = useStyles();
   const registerApiEndPoint = "/users/register";
 
   // calling register api
 
   const onSubmit = async (data) => {
-    const response = await postData(registerApiEndPoint, data);
+    const response = await postData(`${backendurl}/${registerApiEndPoint}`, data);
     if (response.status === 200) {
       const user = await response.json();
       console.log(user);
