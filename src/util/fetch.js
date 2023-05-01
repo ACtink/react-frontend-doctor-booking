@@ -27,6 +27,10 @@ export async function getData(url="" , )
 
 export async function postData(url="" , data={}, header={}) {
 
+
+    console.log(url)
+    console.log(data)
+
     const response = await fetch(url ,{
         method :"POST",
         mode:"cors",
@@ -41,6 +45,8 @@ export async function postData(url="" , data={}, header={}) {
         referrerPolicy: "no-referrer",
         body:JSON.stringify(data),
     })
+    console.log(sessionStorage.getItem("access-token"))
+
     return response
     
 }

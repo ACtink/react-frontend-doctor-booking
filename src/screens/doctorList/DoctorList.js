@@ -70,8 +70,7 @@ function DoctorList(props) {
     setSpeciality(e.target.value);
   };
 
-// const api_url = process.env.BACKEND_URL
-// console.log(api_url)
+
 const backend_url = process.env.REACT_APP_BACKEND_URL
 
 // function to fetch the list of all the doctors

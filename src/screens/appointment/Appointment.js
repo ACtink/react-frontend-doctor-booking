@@ -22,16 +22,24 @@ function Appointment(props) {
 
   const [selectedAppointment, setSelectedAppointment] = useState({});
 
+  const [ loading , setLoading] = useState(false)
+
   const userId = sessionStorage.getItem("uuid");
+
+
+
+  const backendurl = process.env.REACT_APP_BACKEND_URL;
 
   // fetching all the appointments for a particular user with the help of userId
 
   async function getUserAppointments() {
-    const response = await getData(`users/${userId}/appointments`);
+    const response = await getData(`${backendurl}/users/${userId}/appointments`);
 
     if (response.status === 200) {
       const appointments = await response.json();
       setUserAppointments(appointments);
+      setLoading(false)
+      
     } else {
       alert("There is a problem with fetching of user appointments");
     }
@@ -39,6 +47,9 @@ function Appointment(props) {
 
   useEffect(() => {
     if (isLoggedIn) {
+
+      setLoading(true)
+
       getUserAppointments();
     }
   }, [isLoggedIn]);
@@ -94,9 +105,10 @@ function Appointment(props) {
       <center>{!isLoggedIn && <h3>Login to see appointments</h3>}</center>
 
       <center>
-        {isLoggedIn && userAppointments.length === 0 && (
+        {isLoggedIn && userAppointments.length === 0 && !loading ? (
           <h3>You Have Not Booked Any Apppointment.</h3>
-        )}
+        ): loading && <h3>Loading...</h3>}
+      
       </center>
     </div>
   );
