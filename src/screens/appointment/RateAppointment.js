@@ -32,6 +32,8 @@ const useStyles = makeStyles({
 
 Modal.setAppElement("#root");
 
+const backendurl = process.env.REACT_APP_BACKEND_URL;
+
 function RateAppointment(props) {
   const { rateAppointment, setRateAppointment, selectedAppointment } = props;
 
@@ -57,7 +59,6 @@ function RateAppointment(props) {
     }
   }, [rating]);
 
-
   // calling the rating api for giving the rating to a particular doctor selected
 
   async function RateAppointmentApiCaller() {
@@ -70,7 +71,7 @@ function RateAppointment(props) {
       rating: rating,
       comments: comments,
     };
-    const response = await postData("ratings", data);
+    const response = await postData(`${backendurl}/ratings`, data);
     if (response.status === 200) {
       setRateAppointment(false);
 
