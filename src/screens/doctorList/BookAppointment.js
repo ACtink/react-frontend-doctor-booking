@@ -2,26 +2,24 @@ import React from "react";
 import Modal from "react-modal";
 import { useState, useEffect } from "react";
 import { Box, Card, CardContent, CardHeader } from "@material-ui/core";
-import { TextField } from "@material-ui/core";
+import { TextField, Stack } from "@material-ui/core";
 import "date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  FormControl,
-  FormHelperText,
-  InputLabel,
-
-} from "@material-ui/core";
+import { FormControl, FormHelperText, InputLabel } from "@material-ui/core";
 import { MenuItem, Select } from "@material-ui/core";
 import { getData, postData } from "../../util/fetch";
 import { Button } from "@material-ui/core";
 import enLocale from "date-fns/locale/en-GB";
-// import { DatePicker } from "@material-ui/pickers";
+//  import { DatePicker } from '@mui/lab'
 // import { LocalizationProvider } from "@mui/x-date-pickers";
-import { alpha } from '@material-ui/core/styles';
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { alpha } from "@material-ui/core/styles";
 
 Modal.setAppElement("#root");
 
@@ -47,6 +45,7 @@ function BookAppointment(props) {
 
   const handleTimeSlots = (e) => {
     setSelectedTime(e.target.value);
+    setIsTimeSlotSelected(true)
   };
 
   const date = selectedDate.toISOString().split("T")[0];
@@ -71,8 +70,8 @@ function BookAppointment(props) {
 
     if (response.status === 200) {
       const data = await response.json();
-      setAvailableSlots(data);
-      console.log(data);
+      setAvailableSlots(data.timeSlot);
+      console.log(data.timeSlot);
       setSelectedTime("");
     } else {
       const error = response.json();
@@ -102,8 +101,8 @@ function BookAppointment(props) {
       userId: sessionStorage.getItem("uuid"),
       userEmailId: sessionStorage.getItem("uuid"),
       timeSlot: selectedTime,
-      appointmentDate: selectedDate.toLocaleDateString("en-GB"),
-      // appointmentDate: selectedDate.toISOString().split("T")[0],
+      // appointmentDate: selectedDate.toLocaleDateString("en-GB"),
+      appointmentDate: selectedDate.toISOString().split("T")[0],
       symptoms: symptoms,
       priorMedicalHistory: priorMedicalHistory,
     };
@@ -114,7 +113,7 @@ function BookAppointment(props) {
       setBookAppointment(false);
     } else {
       const error = await response.json();
-      alert(error.message);
+      alert(error.message );
     }
   };
 
@@ -150,7 +149,8 @@ function BookAppointment(props) {
                 defaultValue={`${selectedDoctor.firstName} ${selectedDoctor.lastName} `}
               />
               <br></br>
-              <MuiPickersUtilsProvider className={alpha} utils={DateFnsUtils} >
+              <br></br>
+              {/* <MuiPickersUtilsProvider className={alpha} utils={DateFnsUtils} >
                 <KeyboardDatePicker
                 className="alpha"
                   variant="inline"
@@ -165,13 +165,23 @@ function BookAppointment(props) {
                     "aria-label": "change date",
                   }}
                 />
+              </MuiPickersUtilsProvider> */}
 
-                
-              </MuiPickersUtilsProvider>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
 
-              
+              <DatePicker
+                // renderInput={(params) => <TextField {...params} />}
+                TextField={TextField}
+                disablePast={true}
+                value={selectedDate}
+                onChange={handleDateChange}
+              />
+              </LocalizationProvider>
+              <br></br>
+              <br></br>
+              <br></br>
 
-              {/* <FormControl>
+              <FormControl>
                 <InputLabel id="demo-simple-select-helper-label" shrink>
                   Time Slot
                 </InputLabel>
@@ -182,11 +192,13 @@ function BookAppointment(props) {
                   displayEmpty
                   inputProps={{ "aria-label": "Without label" }}
                 >
-                  <MenuItem value="">
+                  <MenuItem value="" disabled>
                     <em>None</em>
                   </MenuItem>
 
-                  {availableSlots && availableSlots.map((slots) => {
+                  {console.log(availableSlots.length)}
+
+                  {availableSlots.length >0 && availableSlots.map((slots) => {
                     return (
                       <MenuItem value={slots} key={slots}>
                         {" "}
@@ -200,7 +212,7 @@ function BookAppointment(props) {
                     <span>Select a time slot </span>
                   </FormHelperText>
                 )}
-              </FormControl> */}
+              </FormControl>
 
               <br></br>
               <FormControl>

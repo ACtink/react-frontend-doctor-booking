@@ -3,6 +3,8 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Controller from "./screens/Controller";
@@ -14,6 +16,15 @@ import Controller from "./screens/Controller";
 //   </React.StrictMode>
 // );
 
+const rootElement = document.getElementById("root");
+const root = createRoot(rootElement);
+
+root.render(
+  
+    <Controller/>
+
+);
+
 
 
 // const container = document.getElementById('root');
@@ -21,7 +32,7 @@ import Controller from "./screens/Controller";
 // root.render(<Controller />);
 
 
-ReactDOM.render(<Controller />, document.getElementById("root"));
+// ReactDOM.render(<Controller />, document.getElementById("root"));
 // createRoot.render(<Controller />, document.getElementById("root"));
 
 // If you want to start measuring performance in your app, pass a function

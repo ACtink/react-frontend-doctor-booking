@@ -29,7 +29,7 @@ function Home() {
         indicatorColor="primary"
       >
         <Tab label="Doctors" />
-        <Tab label="Appointment" />
+        <Tab label="Appointments" />
       </Tabs>
 
       {tabIndex === 0 && (
