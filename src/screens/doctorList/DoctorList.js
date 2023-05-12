@@ -20,15 +20,51 @@ const useStyles = makeStyles({
     textAlign: "left",
     padding: 20,
     cursor: "pointer",
+    '@media (max-width: 730px)': {
+      width: '60%',
+      height:'200px',
+      padding: '50px'
+    },
+    '@media (max-width: 3000px)': {
+      width: '40%',
+      height:'200px',
+      padding: '50px'
+    }
   },
   bookAppointmentButton: {
-    width: "40%",
-    margin: "10px",
+    width: '40%',
+    '@media (min-width: 730px)': {
+      width: '40%',
+      marginLeft:'0%',
+      marginRight:'7%',
+      marginTop: '40px',
+      fontSize:'15px',
+      marginBottom:'8px'
+    },  
+    '@media (min-width: 808px)': {
+      paddingTop:'17.5px',
+      paddingBottom:'17.5px',
+
+
+    }
   },
+  
   viewDetailsButton: {
     backgroundColor: "green",
     width: "40%",
     margin: "10px",
+    marginRight:"0px",
+    
+    '@media (min-width: 730px)': {
+      width: '40%',
+      marginRight:'0%',
+      marginLeft:'7%',
+      marginTop: '40px',
+      paddingTop:'17.5px',
+      paddingBottom:'14.5px',
+      fontSize:'17px',
+      marginBottom:'8px'
+    }
   },
   docDetailsCardHeader: {
     margin: 0,
@@ -43,6 +79,26 @@ const useStyles = makeStyles({
     margin: 0,
     color: "white",
   },
+  speciality:{ 
+    '@media (min-width: 730px)': {
+      marginBottom:'20px'
+    }
+
+  },
+  doctorName:{
+
+  },
+  rating:{
+    '@media (min-width: 730px)': {
+      marginTop:'20px'
+    }
+
+  }, 
+  buttonContainer:{
+   margin:'3px auto'
+
+  }
+
 });
 
 function DoctorList(props) {
@@ -136,22 +192,27 @@ const backend_url = process.env.REACT_APP_BACKEND_URL
             <Paper elevation={5} className={classes.paper} key={doc.id}>
               {" "}
               <Typography gutterBottom>
-                Doctor Name : {doc.firstName} {doc.lastName}
+                <b>Doctor Name</b> : {doc.firstName} {doc.lastName}
               </Typography>
               <br></br>
               <Typography gutterBottom>
-                Speciality : {doc.speciality}
+               
+            
+                <b>Speciality</b> : {doc.speciality}
                 <br></br>
-                Rating :
+                <b>Rating</b> :
                 <Rating
+                 className={classes.rating}
                   name="half-rating"
                   value={doc.rating}
                   precision={0.5}
                   readOnly
                 />
               </Typography>
+              <div className="classes.buttonContainer">
               <Typography gutterBottom>
                 <Button
+                
                   type="submit"
                   variant="contained"
                   color="primary"
@@ -169,6 +230,7 @@ const backend_url = process.env.REACT_APP_BACKEND_URL
                   BOOK APPOINTMENT
                 </Button>
                 <Button
+               
                   type="submit"
                   variant="contained"
                   className={classes.viewDetailsButton}
@@ -180,6 +242,7 @@ const backend_url = process.env.REACT_APP_BACKEND_URL
                   VIEW DETAILS
                 </Button>
               </Typography>
+              </div>
             </Paper>
           );
         })}

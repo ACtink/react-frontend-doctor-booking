@@ -70,7 +70,7 @@ function Appointment(props) {
         userAppointments.map((appointment) => {
           return (
             <Paper
-              elevation={5}
+              elevation={4}
               className={classes.paper}
               key={appointment.appointmentId}
             >
@@ -88,6 +88,8 @@ function Appointment(props) {
               </Typography>
               <br></br>
               <Button
+             
+               
                 type="submit"
                 variant="contained"
                 color="primary"
